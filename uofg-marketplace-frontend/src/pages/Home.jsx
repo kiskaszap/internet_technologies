@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import ListingCard from "../components/ListingCard"
-import bannerImage from "../assets/banner_image.jpg"
+import bannerImage from "../assets/banner_image.webp"
 import api from "../api/axios"
+
+// Homepage displays featured (latest) listings.
+// Performance optimised to improve Lighthouse scores (LCP + CLS).
 
 function Home() {
 
@@ -15,7 +18,8 @@ function Home() {
   const fetchLatest = async () => {
     try {
       const response = await api.get("listings/")
-      // csak a legújabb 8
+       // Limit to 8 items to reduce initial payload
+      // Improves performance and sustainability by lowering render cost
       setListings(response.data.slice(0, 8))
     } catch (error) {
       console.error("Failed to load latest listings")
@@ -25,13 +29,16 @@ function Home() {
   return (
     <div className="max-w-6xl mx-auto px-6">
 
-      {/* Banner */}
+  
       <div className="mt-6">
         <div className="relative h-64 rounded-lg overflow-hidden">
 
           <img
             src={bannerImage}
             alt="UofG Marketplace Banner"
+            width="1200"
+            height="400"
+            fetchPriority="high"
             className="w-full h-full object-cover"
           />
 
@@ -47,22 +54,29 @@ function Home() {
         </div>
       </div>
 
-      {/* Featured Products */}
+    
       <h2 className="text-2xl font-semibold mt-10 mb-6 text-uofg-blue">
         Latest Listings
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-
-        {listings.map((listing) => (
-          <Link key={listing.id} to={`/listing/${listing.id}`}>
-            <ListingCard listing={listing} />
-          </Link>
-        ))}
+{/* // Skeleton placeholders used to prevent layout shift (CLS optimisation)
+            // Ensures grid space is reserved while data loads. */}
+        {listings.length === 0
+  ? Array.from({ length: 8 }).map((_, index) => (
+      <div
+        key={index}
+        className="bg-white border rounded-lg h-64 animate-pulse"
+      />
+    ))
+    // Reusable card component ensures consistency and maintainability
+  : listings.map((listing) => (
+      <ListingCard key={listing.id} listing={listing} />
+    ))}
 
       </div>
 
-      {/* View All */}
+  
       <div className="flex justify-center mt-8">
         <Link
           to="/listings"

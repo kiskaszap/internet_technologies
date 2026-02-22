@@ -1,3 +1,5 @@
+// Reusable form input component, created to reduce duplication across Create, Login and Register pages.
+
 function FormInput({ label, type, name, value, onChange, required }) {
   return (
     <div className="flex flex-col mb-4">

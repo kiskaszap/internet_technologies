@@ -3,6 +3,9 @@ import { useParams, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import api from "../api/axios"
 
+// Allows users to edit only their own listings.
+// Uses pre-filled controlled form and PATCH request for partial updates.
+
 function EditListing() {
 
   const { id } = useParams()
@@ -20,17 +23,16 @@ function EditListing() {
   })
 
   useEffect(() => {
+    // Fetch listing details and categories on mount
+    // Keeps edit form consistent with backend state
     fetchListing()
     fetchCategories()
   }, [])
 
-  // ----------------------------
-  // FETCH LISTING
-  // ----------------------------
   const fetchListing = async () => {
     try {
       const res = await api.get(`listings/${id}/`)
-
+// Pre-fill form with existing data to improve UX
       setFormData({
         title: res.data.title,
         description: res.data.description,
@@ -41,14 +43,12 @@ function EditListing() {
       })
 
     } catch (error) {
+         // Redirect if user does not own the listing or lacks permission
       toast.error("You are not allowed to edit this listing")
       navigate("/my-listings")
     }
   }
 
-  // ----------------------------
-  // FETCH CATEGORIES
-  // ----------------------------
   const fetchCategories = async () => {
     try {
       const res = await api.get("categories/")
@@ -58,10 +58,9 @@ function EditListing() {
     }
   }
 
-  // ----------------------------
-  // HANDLE CHANGE
-  // ----------------------------
+
   const handleChange = (e) => {
+     // File inputs handled separately for multipart upload
     const { name, value, files } = e.target
 
     if (name === "image") {
@@ -71,10 +70,8 @@ function EditListing() {
     }
   }
 
-  // ----------------------------
-  // HANDLE SUBMIT
-  // ----------------------------
   const handleSubmit = async (e) => {
+    // FormData reused to support optional image update
     e.preventDefault()
 
     try {
@@ -89,13 +86,13 @@ function EditListing() {
       if (formData.image) {
         data.append("image", formData.image)
       }
-
+// PATCH chosen instead of PUT to allow partial updates
       await api.patch(`listings/${id}/`, data, {
         headers: { "Content-Type": "multipart/form-data" }
       })
 
       toast.success("Listing updated successfully")
-
+// Redirect back to user dashboard after successful update
       navigate("/my-listings")
 
     } catch (error) {
@@ -112,7 +109,7 @@ function EditListing() {
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
 
-        {/* Title */}
+       
         <input
           type="text"
           name="title"
@@ -122,7 +119,6 @@ function EditListing() {
           className="border rounded px-4 py-2"
         />
 
-        {/* Description */}
         <textarea
           name="description"
           value={formData.description}
@@ -132,7 +128,7 @@ function EditListing() {
           className="border rounded px-4 py-2"
         />
 
-        {/* Price */}
+      
         <input
           type="number"
           name="price"
@@ -142,7 +138,7 @@ function EditListing() {
           className="border rounded px-4 py-2"
         />
 
-        {/* Category */}
+     
         <select
           name="category"
           value={formData.category}
@@ -157,7 +153,7 @@ function EditListing() {
           ))}
         </select>
 
-        {/* Phone */}
+      
         <input
           type="text"
           name="phone_number"
@@ -167,8 +163,7 @@ function EditListing() {
           className="border rounded px-4 py-2"
         />
 
-        {/* Image */}
-        <input
+   <input
           type="file"
           name="image"
           onChange={handleChange}

@@ -5,10 +5,13 @@ import api from "../api/axios"
 import FormInput from "../components/FormInput"
 import { useAuth } from "../context/AuthContext"
 
+// Handles user authentication using JWT tokens.
+// Integrates with global AuthContext to centralise auth state management.
+
 function Login() {
   const navigate = useNavigate()
   const { login } = useAuth()
-
+// Controlled form state ensures predictable input behaviour
   const [formData, setFormData] = useState({
     email: "",
     password: ""
@@ -23,12 +26,12 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-
+ // Basic client-side validation to prevent unnecessary API requests
     if (!formData.email || !formData.password) {
       toast.error("Please fill in all fields")
       return
     }
-
+// Trim email to prevent authentication issues caused by whitespace
     const normalizedEmail = formData.email.trim()
 
     try {
@@ -37,16 +40,17 @@ function Login() {
         password: formData.password
       })
 
-      // AuthContext login
+     // Store JWT tokens via AuthContext for global access
       login(response.data.access, response.data.refresh)
 
       toast.success("Login successful")
-
+ // Small delay improves UX by allowing toast to be visible before redirect
       setTimeout(() => {
         navigate("/")
       }, 1000)
 
     } catch (error) {
+      // Graceful fallback error handling for different backend response formats
       const message =
         error.response?.data?.detail ||
         error.response?.data?.message ||

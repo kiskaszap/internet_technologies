@@ -1,14 +1,27 @@
+//listing card component created to display individual listings in a card format
+// used in the listings page and home page to show latest listings
+import React from "react"
+
 import { Link } from "react-router-dom"
 
 function ListingCard({ listing }) {
   return (
     <div className="bg-white border rounded-lg overflow-hidden hover:shadow-lg transition">
-
+{/* 
+        Image optimisation decisions:
+        - loading="lazy" reduces initial page weight
+        - decoding="async" improves rendering performance
+        - width/height prevent layout shift (CLS optimisation)
+      */}
       <img
-        src={listing.image}
-        alt={listing.title}
-        className="w-full h-40 object-cover"
-      />
+  src={listing.image}
+  alt={listing.title}
+  loading="lazy"
+  decoding="async"
+  width="400"
+  height="160"
+  className="w-full h-40 object-cover"
+/>
 
       <div className="p-4">
         <h3 className="font-semibold text-gray-800 mb-2">

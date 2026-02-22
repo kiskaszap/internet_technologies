@@ -4,6 +4,9 @@ import { toast } from "react-toastify"
 import api from "../api/axios"
 import FormInput from "../components/FormInput"
 
+// Handles user registration and initiates email verification (OTP flow).
+// Designed to validate critical inputs client-side before API submission.
+
 function Register() {
   const navigate = useNavigate()
 
@@ -19,7 +22,8 @@ function Register() {
       [e.target.name]: e.target.value
     })
   }
-
+ // Client-side password confirmation check
+    // Reduces unnecessary backend calls and improves UX
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -34,15 +38,17 @@ function Register() {
         password: formData.password
       })
 
-      // Backend message megjelenítése
+  
       toast.success(response.data.message)
+       // Redirect to OTP verification page with email passed via route state
+      // Avoids storing temporary verification data globally
 
-      // Redirect OTP oldalra (ha lesz ilyen route)
       setTimeout(() => {
         navigate("/verify-otp", { state: { email: formData.email } })
       }, 1500)
 
     } catch (error) {
+      // Flexible error handling to support different backend response formats
       const message =
         error.response?.data?.message || "Something went wrong"
 

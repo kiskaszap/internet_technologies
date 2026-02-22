@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import api from "../api/axios"
 
+// Displays listings created by the authenticated user.
+// Includes edit and delete functionality with confirmation modal.
+
 function MyListings() {
 
   const [listings, setListings] = useState([])
@@ -15,7 +18,10 @@ function MyListings() {
   }, [])
 
   const fetchMyListings = async () => {
+     // Query parameter used to filter listings server-side
+      // Reduces unnecessary data transfer and improves security
     try {
+         // Redirect unauthenticated users to login page
       const response = await api.get("listings/?my=true")
       setListings(response.data)
     } catch (error) {
@@ -53,11 +59,12 @@ function MyListings() {
             key={listing.id}
             className="border rounded-lg overflow-hidden p-4"
           >
-
+ {/* Lazy loading used to reduce dashboard page weight */}
             {listing.image && (
               <img
                 src={listing.image}
                 alt={listing.title}
+                loading="lazy"
                 className="h-40 w-full object-cover mb-4"
               />
             )}
@@ -92,8 +99,10 @@ function MyListings() {
         ))}
 
       </div>
-
-      {/* ---------------- MODAL ---------------- */}
+ {/* 
+        Confirmation modal prevents accidental deletion.
+        Rendered conditionally to avoid unnecessary DOM complexity.
+      */}
       {deleteId && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
 

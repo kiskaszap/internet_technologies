@@ -5,7 +5,7 @@ function Footer() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
-          {/* About */}
+         
           <div>
             <h3 className="font-semibold mb-3 text-uofg-gold">
               UofG Student Marketplace
@@ -15,7 +15,7 @@ function Footer() {
             </p>
           </div>
 
-          {/* Quick Links */}
+        
           <div>
             <h3 className="font-semibold mb-3 text-uofg-gold">
               Quick Links
@@ -44,7 +44,7 @@ function Footer() {
             </ul>
           </div>
 
-          {/* Contact */}
+         
           <div>
             <h3 className="font-semibold mb-3 text-uofg-gold">
               Contact
@@ -56,7 +56,7 @@ function Footer() {
 
         </div>
 
-        {/* Bottom */}
+       
         <div className="border-t border-gray-500 mt-8 pt-4 text-center text-sm text-gray-300">
           © {new Date().getFullYear()} University of Glasgow Marketplace
         </div>

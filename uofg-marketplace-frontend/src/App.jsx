@@ -14,7 +14,8 @@ import MyListings from "./pages/MyListings"
 import EditListing from "./pages/EditListing"
 
 
-
+// Central routing configuration for the application.
+// Uses nested routing to share a common layout across all pages.
 
 
 
@@ -22,8 +23,11 @@ function App() {
   return (
     <>
     <Routes>
-
-      {/* Layout wrapper */}
+  {/* 
+          MainLayout wraps all routes to provide consistent
+          navigation and page structure across the app.
+        */}
+ 
       <Route element={<MainLayout />}>
 
         <Route path="/" element={<Home />} />
@@ -35,17 +39,16 @@ function App() {
         <Route path="/verify-otp" element={<VerifyOTP />} />
         <Route path="/my-listings" element={<MyListings />} />
         <Route path="/edit-listing/:id" element={<EditListing />} />
-
-
-
-
-
-        {/* 404 inside layout */}
+        {/* Fallback route for undefined paths */}
         <Route path="*" element={<div>404 Not Found</div>} />
 
       </Route>
      
     </Routes>
+     {/* 
+        Global toast container used for consistent notification handling
+        across all components.
+      */}
      <ToastContainer position="top-right" autoClose={3000} />
     </>
   )

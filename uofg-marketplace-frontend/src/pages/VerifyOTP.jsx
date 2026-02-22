@@ -3,10 +3,16 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import api from "../api/axios"
 
+// Handles email verification using One-Time Password (OTP).
+// Completes the registration process before allowing login.
+
+
 function VerifyOTP() {
   const [otp, setOtp] = useState("")
   const location = useLocation()
   const navigate = useNavigate()
+  // Email passed securely via route state from Register page
+  // Avoids storing temporary verification data globally
 
   const email = location.state?.email
 
@@ -20,12 +26,13 @@ function VerifyOTP() {
       })
 
       toast.success(response.data.message)
-
+ // Redirect user to login page after successful verification
       setTimeout(() => {
         navigate("/login")
       }, 1500)
 
     } catch (error) {
+        // Graceful fallback for invalid or expired OTP
       toast.error(
         error.response?.data?.message || "Invalid or expired OTP"
       )
@@ -44,7 +51,10 @@ function VerifyOTP() {
       </p>
 
       <form onSubmit={handleSubmit}>
-
+ {/* 
+          Input restricted to 6 characters to match OTP format.
+          Controlled state ensures validation before submission.
+        */}
         <input
           type="text"
           value={otp}
