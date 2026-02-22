@@ -153,7 +153,9 @@ The most significant sustainability-related performance improvements were achiev
 
 These optimisations substantially improved Lighthouse performance metrics while maintaining usability and security.
 
-## Project Structure 
+## Project Structure
+
+```
 internet_technologies/
 │
 ├── backend/
@@ -189,27 +191,38 @@ internet_technologies/
 │   └── eslint.config.js
 │
 └── README.md
+```
 
-## Setup instructions
+---
+
+## Setup Instructions
+
 ### Backend
 
+```bash
 cd backend
 python -m venv venv
-venv\Scripts\activate   (Windows)
+venv\Scripts\activate   # Windows
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver
-
+```
 
 ### Create .env file
+
+```
 SECRET_KEY=
 EMAIL_HOST_USER=
 EMAIL_HOST_PASSWORD=
+```
 
 ### Frontend
+
+```bash
 cd uofg-marketplace-frontend
 npm install
 npm run dev
+```
 
 ## API endpoints
 
